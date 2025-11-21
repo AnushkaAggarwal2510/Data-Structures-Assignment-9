@@ -1,0 +1,108 @@
+Question 2) Implement priority queues using heaps.
+
+Answer 2)
+
+#include <iostream>
+using namespace std;
+
+class PriorityQueue {
+private:
+    int arr[100];
+    int size;
+
+public:
+    PriorityQueue() {
+        size = 0;
+    }
+    void heapifyDown(int i) {
+        int left = 2*i + 1;
+        int right = 2*i + 2;
+        int largest = i;
+
+        if (left < size && arr[left] > arr[largest])
+            largest = left;
+        if (right < size && arr[right] > arr[largest])
+            largest = right;
+
+        if (largest != i) {
+            swap(arr[i], arr[largest]);
+            heapifyDown(largest);
+        }
+    }
+    void heapifyUp(int i) {
+        int parent = (i - 1) / 2;
+
+        if (i >= 0 && arr[i] > arr[parent]) {
+            swap(arr[i], arr[parent]);
+            heapifyUp(parent);
+        }
+    }
+    void insert(int val) {
+        arr[size] = val;
+        size++;
+        heapifyUp(size - 1);
+    }
+    int getMax() {
+        if (size == 0) {
+            cout << "Priority Queue is empty!\n";
+            return -1;
+        }
+        return arr[0];
+    }
+    void deleteMax() {
+        if (size == 0) {
+            cout << "Priority Queue is empty!\n";
+            return;
+        }
+        arr[0] = arr[size - 1];
+        size--;
+        heapifyDown(0);
+    }
+    void display() {
+        if (size == 0) {
+            cout << "Priority Queue is empty!\n";
+            return;
+        }
+        cout << "Priority Queue (Max-Heap): ";
+        for (int i = 0; i < size; i++)
+            cout << arr[i] << " ";
+        cout << endl;
+    }
+};
+
+int main() {
+    PriorityQueue pq;
+    int choice, value;
+
+    while (true) {
+        cout << "\nPRIORITY QUEUE USING MAX HEAP";
+        cout << "\n1. Insert";
+        cout << "\n2. Get Maximum";
+        cout << "\n3. Delete Maximum";
+        cout << "\n4. Display";
+        cout << "\n5. Exit";
+        cout << "\nEnter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "Enter value to insert: ";
+                cin >> value;
+                pq.insert(value);
+                break;
+            case 2:
+                cout << "Maximum Element = " << pq.getMax() << endl;
+                break;
+            case 3:
+                pq.deleteMax();
+                break;
+            case 4:
+                pq.display();
+                break;
+            case 5:
+                return 0;
+            default:
+                cout << "Invalid choice! Try again.\n";
+        }
+    }
+}
